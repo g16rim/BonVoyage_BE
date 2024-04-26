@@ -21,7 +21,7 @@ public interface ProfileImageRepository extends JpaRepository<ProfileImage, Long
 
     @Transactional
     @Modifying
-    @Query("update profileImg p set p.member = :member where p.id = :profileImgId")
-    int updateGallery(@Param("profileImgId") Long profileImgId, @Param("member") Member member);
+    @Query("update profileImage p set p.member = :member where p.id = :profileImageId")
+    int updateGallery(@Param("profileImageId") Long profileImageId, @Param("member") Member member);
 
 }

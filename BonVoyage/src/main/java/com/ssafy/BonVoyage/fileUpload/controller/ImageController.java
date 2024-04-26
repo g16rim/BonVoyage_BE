@@ -28,7 +28,7 @@ import static com.ssafy.BonVoyage.fileUpload.service.S3Service.CLOUD_FRONT_DOMAI
 @Slf4j
 @RestController
 @AllArgsConstructor
-@Tag(name="gallery", description = "프로필 이미지 저장 api")
+@Tag(name="Image Upload", description = "프로필 이미지 저장 api")
 @RequestMapping("/api")
 public class ImageController {
     private S3Service s3Service;

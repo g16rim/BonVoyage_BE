@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity(name = "profileImg")
-@Table(name = "profileImg")
+@Entity(name = "profileImage")
+@Table(name = "profileImage")
 public class ProfileImage {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "profileImg_id")
+    @Column(name = "profileImage_id")
     private Long id;
 
     @Column(columnDefinition = "TEXT")
