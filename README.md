@@ -1,4 +1,4 @@
-# EnjoyTrip_Framework_서울10반_서영선_박경림
+# EnjoyTrip Spring S10 Team09
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://lab.ssafy.com/sue000731/enjoytrip_framework_s10_team09.git
+git remote add origin https://lab.ssafy.com/sue000731/enjoyTrip_spring_s10_team09.git
 git branch -M master
 git push -uf origin master
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://lab.ssafy.com/sue000731/enjoytrip_framework_s10_team09/-/settings/integrations)
+- [ ] [Set up project integrations](https://lab.ssafy.com/sue000731/enjoyTrip_spring_s10_team09/-/settings/integrations)
 
 ## Collaborate with your team
 
