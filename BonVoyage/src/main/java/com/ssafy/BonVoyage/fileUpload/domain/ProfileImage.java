@@ -1,7 +1,7 @@
 package com.ssafy.BonVoyage.fileUpload.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.BonVoyage.login.domain.Member;
+import com.ssafy.BonVoyage.auth.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
