@@ -2,7 +2,7 @@ package com.ssafy.BonVoyage.record.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.ssafy.BonVoyage.travelCommon.domain.TravelGroup;
+import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

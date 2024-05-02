@@ -3,7 +3,7 @@ package com.ssafy.BonVoyage.fileUpload.repository;
 
 
 import com.ssafy.BonVoyage.fileUpload.domain.ProfileImage;
-import com.ssafy.BonVoyage.login.domain.Member;
+import com.ssafy.BonVoyage.auth.domain.Member;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
