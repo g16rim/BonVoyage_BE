@@ -1,11 +1,9 @@
 package com.ssafy.BonVoyage.plan.domain;
 
 
+import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -34,6 +32,10 @@ public class TravelPlan {
     @Column
     private Integer budget;
 
+    @Column
+    private String planTitle;
 
-
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private TravelGroup travelGroup;
 }
