@@ -1,8 +1,8 @@
-package com.ssafy.BonVoyage.fileUpload.repository;
+package com.ssafy.BonVoyage.file.repository;
 
 
 
-import com.ssafy.BonVoyage.fileUpload.domain.ProfileImage;
+import com.ssafy.BonVoyage.file.domain.ProfileImage;
 import com.ssafy.BonVoyage.auth.domain.Member;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

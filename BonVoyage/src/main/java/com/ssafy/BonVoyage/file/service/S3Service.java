@@ -1,4 +1,4 @@
-package com.ssafy.BonVoyage.fileUpload.service;
+package com.ssafy.BonVoyage.file.service;
 
 
 import com.amazonaws.auth.AWSCredentials;

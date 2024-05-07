@@ -1,7 +1,7 @@
 package com.ssafy.BonVoyage.group.dto;
 
 
-import com.ssafy.BonVoyage.fileUpload.domain.ProfileImage;
+import com.ssafy.BonVoyage.file.domain.ProfileImage;
 import com.ssafy.BonVoyage.group.domain.GroupWithMember;
 import com.ssafy.BonVoyage.group.enumeration.Preference;
 import lombok.*;
