@@ -1,9 +1,9 @@
-package com.ssafy.BonVoyage.fileUpload.dto;
+package com.ssafy.BonVoyage.file.dto;
 
 
 
 
-import com.ssafy.BonVoyage.fileUpload.domain.ProfileImage;
+import com.ssafy.BonVoyage.file.domain.ProfileImage;
 import lombok.*;
 
 @Getter

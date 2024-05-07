@@ -1,10 +1,10 @@
-package com.ssafy.BonVoyage.fileUpload.service;
+package com.ssafy.BonVoyage.file.service;
 
 
 
-import com.ssafy.BonVoyage.fileUpload.domain.ProfileImage;
-import com.ssafy.BonVoyage.fileUpload.dto.ProfileImageDto;
-import com.ssafy.BonVoyage.fileUpload.repository.ProfileImageRepository;
+import com.ssafy.BonVoyage.file.domain.ProfileImage;
+import com.ssafy.BonVoyage.file.dto.ProfileImageDto;
+import com.ssafy.BonVoyage.file.repository.ProfileImageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

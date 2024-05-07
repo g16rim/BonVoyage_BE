@@ -1,8 +1,8 @@
-package com.ssafy.BonVoyage.fileUpload.controller;
+package com.ssafy.BonVoyage.file.controller;
 
-import com.ssafy.BonVoyage.fileUpload.dto.ProfileImageDto;
-import com.ssafy.BonVoyage.fileUpload.service.ImageService;
-import com.ssafy.BonVoyage.fileUpload.service.S3Service;
+import com.ssafy.BonVoyage.file.dto.ProfileImageDto;
+import com.ssafy.BonVoyage.file.service.ImageService;
+import com.ssafy.BonVoyage.file.service.S3Service;
 import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
 import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.auth.domain.Member;
@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static com.ssafy.BonVoyage.fileUpload.service.S3Service.CLOUD_FRONT_DOMAIN_NAME;
+import static com.ssafy.BonVoyage.file.service.S3Service.CLOUD_FRONT_DOMAIN_NAME;
 
 
 @Slf4j

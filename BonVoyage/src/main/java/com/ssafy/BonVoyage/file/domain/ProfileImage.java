@@ -1,4 +1,4 @@
-package com.ssafy.BonVoyage.fileUpload.domain;
+package com.ssafy.BonVoyage.file.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.BonVoyage.auth.domain.Member;
