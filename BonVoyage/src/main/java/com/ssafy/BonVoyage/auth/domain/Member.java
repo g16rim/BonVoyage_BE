@@ -35,11 +35,9 @@ public class Member {
     @Column
     private String imageUrl;
 
-    @Column
-    private Integer building;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
-    @Column
-    private Integer floor;
 
 
     public void updateName(String name){

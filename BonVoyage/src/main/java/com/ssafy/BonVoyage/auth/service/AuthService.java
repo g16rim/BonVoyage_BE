@@ -112,8 +112,7 @@ public class AuthService {
                 .provider(Provider.local)
                 .authority(Authority.USER)
                 .imageUrl(signUpRequest.getImageUrl())
-                .building(signUpRequest.getBuilding())
-                .floor(signUpRequest.getFloor())
+                .grade(Grade.Beginner)
                 .build();
 
 

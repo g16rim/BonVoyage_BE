@@ -1,5 +1,6 @@
 package com.ssafy.BonVoyage.auth.payload.request.auth;
 
+import com.ssafy.BonVoyage.auth.domain.Grade;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +24,5 @@ public class SignUpRequest {
 
     private String ImageUrl;
 
-    private Integer building;
 
-    private Integer floor;
 }
