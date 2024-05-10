@@ -31,7 +31,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "유저 정보 확인", description = "현제 접속된 유저정보를 확인합니다.")
+    @Operation(summary = "유저 정보 확인", description = "현재 접속된 유저정보를 확인합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "유저 확인 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Member.class) ) } ),
             @ApiResponse(responseCode = "400", description = "유저 확인 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
@@ -43,7 +43,7 @@ public class AuthController {
         return authService.whoAmI(userPrincipal);
     }
 
-    @Operation(summary = "유저 정보 삭제", description = "현제 접속된 유저정보를 삭제합니다.")
+    @Operation(summary = "유저 정보 삭제", description = "현재 접속된 유저정보를 삭제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "유저 삭제 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class) ) } ),
             @ApiResponse(responseCode = "400", description = "유저 삭제 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
@@ -55,7 +55,7 @@ public class AuthController {
         return authService.delete(userPrincipal);
     }
 
-    @Operation(summary = "유저 정보 갱신", description = "현제 접속된 유저의 비밀번호를 새로 지정합니다.")
+    @Operation(summary = "유저 정보 갱신", description = "현재 접속된 유저의 비밀번호를 새로 지정합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "유저 정보 갱신 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class) ) } ),
             @ApiResponse(responseCode = "400", description = "유저 정보 갱신 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),

@@ -6,12 +6,11 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-@Getter
-public class GroupCreateRequest {
+public record GroupCreateRequest(
+        @NotNull(message = "이름을 입력해주세요.")
+        String name,
 
-    @NotNull(message = "그룹 이름을 입력해주세요.")
-    private String name;
-
-    @Nullable
-    private String description;
+        @Nullable
+        String description
+) {
 }

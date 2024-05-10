@@ -1,5 +1,5 @@
 package com.ssafy.BonVoyage.util;
-
+import static java.time.ZoneOffset.UTC;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -41,6 +42,14 @@ public class RedisUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static long toTomorrow() {
+        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime tomorrow = now.plusDays(1);
+        final long secondsUntilTomorrow = tomorrow.toEpochSecond(UTC) - now.toEpochSecond(UTC);
+        return secondsUntilTomorrow * 1000;
+    }
+
 
 
     public void flushAll() {

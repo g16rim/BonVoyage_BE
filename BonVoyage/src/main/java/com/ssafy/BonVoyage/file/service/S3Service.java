@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -51,25 +53,31 @@ public class S3Service implements ApplicationListener<ApplicationStartedEvent> {
     }
 
     public String upload(MultipartFile file) throws IOException {
+        String fileName ="";
+        if(file!= null) {
+            String contentType = file.getContentType();
 
-        String contentType = file.getContentType();
+            // 확장자가 jpeg, jpg, gif, png가 아니면 업로드 실패
+            if (!(contentType.contains("image/jpeg") || contentType.contains("image/jpg") || contentType.contains("image/png") || contentType.contains("image/gif"))) {
+                throw new IllegalArgumentException("이미지 확장자가 올바르지 않습니다.");
+            }
+            // 고유한 key 값을 갖기위해 현재 시간을 postfix로 붙여줌
+            SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
+            fileName += file.getOriginalFilename() + "-" + date.format(new Date());
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
 
-        // 확장자가 jpeg, jpg, gif, png가 아니면 업로드 실패
-        if(!(contentType.contains("image/jpeg")||contentType.contains("image/jpg")||contentType.contains("image/png")||contentType.contains("image/gif"))) {
-            throw new IllegalArgumentException("이미지 확장자가 올바르지 않습니다.");
+            // 파일 업로드
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
         }
-        // 고유한 key 값을 갖기위해 현재 시간을 postfix로 붙여줌
-        SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
-        String fileName = file.getOriginalFilename() + "-" + date.format(new Date());
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
-        metadata.setContentLength(file.getSize());
-
-        // 파일 업로드
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-
         return fileName;
+    }
+
+    public void delete(final String fileName) {
+        final String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+        s3Client.deleteObject(bucket, decodedFileName);
     }
 
     @Override

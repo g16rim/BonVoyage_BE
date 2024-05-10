@@ -53,4 +53,17 @@ public class TravelGroup {
                 .build();
     }
 
+    public void update(final String groupName, final String description) {
+        this.groupName = groupName;
+        this.description = description;
+    }
+
+
+    public boolean hasImage() {
+        return !groupProfileImage.equals("");
+    }
+
+    public void updateImageUrl(final String imageUrl) {
+        this.groupProfileImage = imageUrl;
+    }
 }
