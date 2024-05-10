@@ -22,7 +22,7 @@ public class TravelGroupDto {
 
     private Preference preference;
 
-    private ProfileImage groupProfileImage;
+    private String groupProfileImage;
 
     private List<GroupWithMember> groupWithMembers = new ArrayList<>();
 }

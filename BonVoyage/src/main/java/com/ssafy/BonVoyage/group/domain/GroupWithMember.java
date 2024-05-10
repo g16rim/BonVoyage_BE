@@ -21,14 +21,12 @@ public class GroupWithMember {
     @JoinColumn(name="member_id")
     private Member member;
 
+    @Column
+    private Long groupId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="group_id")
-    private TravelGroup travelGroup;
-
-    public GroupWithMember(Member member, TravelGroup travelGroup) {
+    public GroupWithMember(Member member, Long groupId) {
         this.member = member;
-        this.travelGroup = travelGroup;
+        this.groupId = groupId;
     }
 
 }

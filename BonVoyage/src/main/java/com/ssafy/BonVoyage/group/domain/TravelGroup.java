@@ -32,18 +32,16 @@ public class TravelGroup {
     private String groupName;
 
     @Column
+    private String description;
+
+    @Column
     private Integer groupNum;
 
     @Enumerated(EnumType.STRING)
     private Preference preference;
 
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "profileImage_id")
-    private ProfileImage groupProfileImage;
-
-    @OneToMany(mappedBy = "travelGroup")
-    private List<GroupWithMember> groupWithMembers = new ArrayList<>();
+    @Column
+    private String groupProfileImage;
 
 
     public static TravelGroup toEntity(TravelGroupDto dto) {
