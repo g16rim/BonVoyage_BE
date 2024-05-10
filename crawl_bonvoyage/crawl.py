@@ -3,10 +3,10 @@ import requests
 # from bs4 import BeautifulSoup as bs
 import json
 
-serviceKey = 'b+NZqkdbTJe3R9hRrdPnzw85LQSsFog+PAEBXHJ4FLR7Kgxcrlw7PFI+kFG24IxNoyBx8f0VrSdG7Uk5lYjJ6g=='
+serviceKey = ''
 rType = 'json'
 num = '32'
-url = 'https://apis.data.go.kr/B551011/KorService1/searchStay1?serviceKey=b%2BNZqkdbTJe3R9hRrdPnzw85LQSsFog%2BPAEBXHJ4FLR7Kgxcrlw7PFI%2BkFG24IxNoyBx8f0VrSdG7Uk5lYjJ6g%3D%3D&numOfRows=500&pageNo=2&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A'
+url = 'https://apis.data.go.kr/B551011/KorService1/searchStay1?serviceKey=' + serviceKey + '&numOfRows=500&pageNo=2&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A'
 
 res = requests.get(url).text
 data = json.loads(res)
