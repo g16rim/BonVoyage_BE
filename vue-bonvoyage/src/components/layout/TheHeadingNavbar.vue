@@ -33,6 +33,7 @@
                     </li>
                     <li class="nav-item">
                         <router-link :to="{ name: 'login' }" class="nav-link">로그인</router-link>
+
                     </li>
                 </ul>
             </div>
