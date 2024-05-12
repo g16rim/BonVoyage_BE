@@ -3,18 +3,19 @@ package com.ssafy.BonVoyage.site.service.impl;
 import com.ssafy.BonVoyage.site.dto.TravelSiteDto;
 import com.ssafy.BonVoyage.site.repository.TravelSiteRepository;
 import com.ssafy.BonVoyage.site.service.TravelSiteService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class TravelSiteServiceImpl implements TravelSiteService {
 
-    private TravelSiteRepository travelSiteRepository;
+    private final TravelSiteRepository travelSiteRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public TravelSiteDto read(Long id) {
         return TravelSiteDto.toDto(travelSiteRepository.findById(id)
                 .orElseThrow(() ->

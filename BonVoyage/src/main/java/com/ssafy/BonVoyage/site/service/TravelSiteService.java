@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface TravelSiteService {
-    public TravelSiteDto read(Long id);
+    TravelSiteDto read(Long id);
 }
