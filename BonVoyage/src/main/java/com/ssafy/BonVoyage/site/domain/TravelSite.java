@@ -64,5 +64,6 @@ public class TravelSite {
     private double latitude;
 
     private double longitude;
+
 }
 
