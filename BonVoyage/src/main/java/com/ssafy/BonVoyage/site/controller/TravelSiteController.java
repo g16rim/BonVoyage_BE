@@ -23,4 +23,6 @@ public class TravelSiteController {
     public ResponseEntity<?> read(@PathVariable final Long id) {
         return ResponseEntity.ok(travelSiteService.read(id));
     }
+
+    
 }
