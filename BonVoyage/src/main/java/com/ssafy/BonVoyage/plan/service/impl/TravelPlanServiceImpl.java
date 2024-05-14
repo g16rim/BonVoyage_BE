@@ -5,18 +5,16 @@ import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
 import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TravelPlanServiceImpl implements TravelPlanService {
 
-    private TravelPlanRepository planRepository;
-    private TravelGroupRepository groupRepository;
+    private final TravelPlanRepository planRepository;
+    private final TravelGroupRepository groupRepository;
 
     @Override
     @Transactional

@@ -4,9 +4,10 @@ package com.ssafy.BonVoyage.plan.domain;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,13 +22,14 @@ public class TravelPlan {
     private Long id;
 
     @Column
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column
-    private Timestamp timestamp;  // 여행 생성 날짜
+    @CreatedDate
+    private LocalDateTime createdDate;  // 여행 생성 날짜
 
     @Column
     private Integer budget;
