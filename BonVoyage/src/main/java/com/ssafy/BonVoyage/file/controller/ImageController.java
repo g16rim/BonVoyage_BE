@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +24,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static com.ssafy.BonVoyage.file.service.S3Service.CLOUD_FRONT_DOMAIN_NAME;
+
 
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Tag(name="Image Upload", description = "프로필 이미지 저장 api")
 @RequestMapping("/api")
 public class ImageController {
-    private S3Service s3Service;
-    private ImageService imageService;
+    @Value("${cloud.address}")
+    private String CLOUD_FRONT_DOMAIN_NAME;
+    private final S3Service s3Service;
+    private final ImageService imageService;
     private final MemberRepository memberRepository;
 
     @Operation(method = "get", summary = "모든 이미지 조회")

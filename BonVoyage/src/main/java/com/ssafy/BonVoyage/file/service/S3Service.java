@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
@@ -40,7 +41,8 @@ public class S3Service implements ApplicationListener<ApplicationStartedEvent> {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    public static final String CLOUD_FRONT_DOMAIN_NAME = "https://sys-s3-bucket.s3.ap-northeast-2.amazonaws.com";
+    @Value("${cloud.address}")
+    public String CLOUD_FRONT_DOMAIN_NAME;
 
     @PostConstruct
     public void setS3Client() {
