@@ -2,6 +2,7 @@ package com.ssafy.BonVoyage.plan.service.impl;
 
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
+import com.ssafy.BonVoyage.plan.domain.TravelPlan;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
 import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
@@ -33,10 +34,12 @@ public class TravelPlanServiceImpl implements TravelPlanService {
 
     @Override
     @Transactional
-    public TravelPlanDto update(TravelPlanDto dto) {
+    public TravelPlanDto update(Long planId, TravelPlanDto dto) {
         TravelGroup group = groupRepository.findById(dto.getTravelGroupId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 그룹이 존재하지 않습니다. id=" + dto.getTravelGroupId()));
-        return TravelPlanDto.toDto(planRepository.save(dto.toEntity(group)));
+        TravelPlan plan = planRepository.findById(planId).get();
+        plan.update(dto.getPlanTitle(), dto.getStartDate(), dto.getEndDate(), dto.getBudget()); // jpa dirty checking
+        return TravelPlanDto.toDto(planRepository.findById(plan.getId()).get());
     }
 
     @Override

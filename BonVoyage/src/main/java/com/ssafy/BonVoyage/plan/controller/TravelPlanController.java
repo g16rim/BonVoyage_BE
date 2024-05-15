@@ -49,8 +49,8 @@ public class TravelPlanController {
             @ApiResponse(responseCode = "400", description = "유저 확인 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
     })
     @PutMapping("/{planId}")
-    public ResponseEntity<?> update(@RequestBody TravelPlanDto dto) {
-        return ResponseEntity.ok(travelPlanService.update(dto));
+    public ResponseEntity<?> update(@PathVariable(name = "planId") Long planId, @RequestBody TravelPlanDto dto) {
+        return ResponseEntity.ok(travelPlanService.update(planId, dto));
     }
 
     @Operation(summary = "여행 계획 삭제", description = "여행 계획을 삭제합니다.")

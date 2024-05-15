@@ -40,4 +40,11 @@ public class TravelPlan {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private TravelGroup travelGroup;
+
+    public void update(String planTitle, LocalDate startDate, LocalDate endDate, Integer budget) {
+        if (planTitle != null) this.planTitle = planTitle;
+        if (startDate != null) this.startDate = startDate;
+        if (endDate != null) this.endDate = endDate;
+        if (budget != null) this.budget = budget;
+    }
 }
