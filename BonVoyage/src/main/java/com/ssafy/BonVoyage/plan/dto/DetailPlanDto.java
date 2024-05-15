@@ -2,6 +2,7 @@ package com.ssafy.BonVoyage.plan.dto;
 
 import com.ssafy.BonVoyage.plan.domain.DetailPlan;
 import com.ssafy.BonVoyage.plan.domain.TravelPlan;
+import com.ssafy.BonVoyage.site.domain.TravelSite;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,25 +12,29 @@ import java.sql.Timestamp;
 @Builder
 public class DetailPlanDto {
     private int day;
-    private Timestamp time;
     private int planOrder;
-    private Long travelPlanId;
+    private int price;
+    private String comment;
+    private Long planId;
+    private Long siteId;
 
-    public DetailPlan toEntity(TravelPlan travelPlan) {
+    public DetailPlan toEntity(TravelPlan travelPlan, TravelSite travelSite) {
         return DetailPlan.builder()
                 .day(day)
-                .time(time)
+                .price(price)
                 .planOrder(planOrder)
                 .travelPlan(travelPlan)
+                .travelSite(travelSite)
                 .build();
     }
 
     public static DetailPlanDto toDto(DetailPlan entity) {
         return DetailPlanDto.builder()
                 .day(entity.getDay())
-                .time(entity.getTime())
+                .price(entity.getPrice())
                 .planOrder(entity.getPlanOrder())
-                .travelPlanId(entity.getTravelPlan().getId())
+                .planId(entity.getTravelPlan().getId())
+                .siteId(entity.getTravelSite().getId())
                 .build();
     }
 

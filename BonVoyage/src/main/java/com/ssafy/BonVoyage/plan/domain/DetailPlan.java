@@ -1,15 +1,15 @@
 package com.ssafy.BonVoyage.plan.domain;
 
+import com.ssafy.BonVoyage.site.domain.TravelSite;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
-
 @Entity
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "detail_plan")
 public class DetailPlan {
 
     @Id
@@ -21,10 +21,17 @@ public class DetailPlan {
     private int day;
 
     @Column
-    private Timestamp time;
+    private int planOrder;
 
     @Column
-    private int planOrder;
+    private int price;
+
+    @Column
+    private String comment;
+
+    @OneToOne
+    @JoinColumn(name = "site_id")
+    private TravelSite travelSite;
 
     @ManyToOne
     @JoinColumn(name = "plan_id")
