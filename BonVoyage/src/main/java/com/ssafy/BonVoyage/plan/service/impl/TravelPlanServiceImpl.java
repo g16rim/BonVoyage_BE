@@ -1,5 +1,7 @@
 package com.ssafy.BonVoyage.plan.service.impl;
 
+import com.ssafy.BonVoyage.auth.domain.Member;
+import com.ssafy.BonVoyage.auth.repository.MemberRepository;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
 import com.ssafy.BonVoyage.plan.domain.TravelPlan;
@@ -10,12 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class TravelPlanServiceImpl implements TravelPlanService {
 
     private final TravelPlanRepository planRepository;
     private final TravelGroupRepository groupRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
@@ -46,5 +52,22 @@ public class TravelPlanServiceImpl implements TravelPlanService {
     @Transactional
     public void delete(Long id) {
         planRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TravelPlanDto> list(String userEmail) {
+        // 1. user group 조회
+        Member member = memberRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다. id=" + userEmail));
+        List<TravelGroup> userGroup = groupRepository.findAllByMemberId(member.getId());
+        List<Long> groupIds = userGroup.stream().map(TravelGroup::getId).collect(Collectors.toList());
+
+        // 2. group별 여행 조회
+        List<TravelPlan> travelPlans = planRepository.findByTravelGroupIn(userGroup);
+
+        return travelPlans.stream()
+                .map(travelPlan -> TravelPlanDto.toDto(travelPlan))
+                .collect(Collectors.toList());
     }
 }

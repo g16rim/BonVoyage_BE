@@ -1,5 +1,7 @@
 package com.ssafy.BonVoyage.plan.controller;
 
+import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
+import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,4 +68,18 @@ public class TravelPlanController {
         return ResponseEntity.ok(planId);
     }
 
+    @Operation(summary = "여행 계획 목록", description = "유저 여행 계획 목록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "계획 삭제 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class) ) } ),
+            @ApiResponse(responseCode = "400", description = "유저 확인 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
+    })
+    @GetMapping("/list")
+    public ResponseEntity<?> list(@CurrentUser UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(400).body("유저 확인 실패");
+        }
+
+        String userEmail = userDetails.getUsername();
+        return ResponseEntity.ok(travelPlanService.list(userEmail));
+    }
 }
