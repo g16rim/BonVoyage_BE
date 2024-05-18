@@ -5,7 +5,7 @@ import com.ssafy.BonVoyage.plan.dto.DetailPlanDto;
 import java.util.List;
 
 public interface DetailPlanService {
-    Long create(DetailPlanDto dto);
+    int create(List<DetailPlanDto> dtos);
     DetailPlanDto read(Long id);
     DetailPlanDto update(DetailPlanDto dto);
     void delete(Long id);
