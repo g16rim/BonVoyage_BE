@@ -1,6 +1,7 @@
 package com.ssafy.BonVoyage.plan.service;
 
 import com.ssafy.BonVoyage.plan.dto.DetailPlanDto;
+import com.ssafy.BonVoyage.plan.dto.response.DetailPlanListResponse;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface DetailPlanService {
     void delete(Long id);
 
     List<DetailPlanDto> listDetailPlan(Long planId);
+
+    List<DetailPlanListResponse> listDetailPlanSites(int planId);
 }
