@@ -81,8 +81,8 @@ public class AuthService {
     public ResponseEntity<?> signin(SignInRequest signInRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        signInRequest.getEmail(),
-                        signInRequest.getPassword()
+                        signInRequest.getUserId(),
+                        signInRequest.getUserPwd()
                 )
         );
 

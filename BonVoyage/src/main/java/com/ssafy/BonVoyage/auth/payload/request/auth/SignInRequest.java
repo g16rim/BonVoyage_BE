@@ -14,10 +14,10 @@ public class SignInRequest {
     @NotBlank
     @NotNull
     @Email
-    private String email;
+    private String userId;
 
     @Schema( type = "string", example = "string", description="계정 비밀번호 입니다.")
     @NotBlank
     @NotNull
-    private String password;
+    private String userPwd;
 }
