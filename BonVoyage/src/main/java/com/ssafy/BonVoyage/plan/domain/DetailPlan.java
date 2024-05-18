@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Getter
 @Table(name = "detail_plan")
 public class DetailPlan {
 
@@ -20,14 +21,8 @@ public class DetailPlan {
     @Column
     private int day;
 
-    @Column
+    @Column(name = "plan_order")
     private int planOrder;
-
-    @Column
-    private int price;
-
-    @Column
-    private String comment;
 
     @OneToOne
     @JoinColumn(name = "site_id")

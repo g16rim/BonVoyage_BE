@@ -16,44 +16,36 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "travel_site")
 public class TravelSite {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "site_id")
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
+    @Column
     private int type;
 
     @Column
-    private String sitePictureUrl;
+    private String image;
 
-    @Column(nullable = false)
-    private String phone;
+    @Column
+    private String tel;
 
-    @Lob
-    private String content;
-
-    @Column(nullable = false)
+    @Column
     @ColumnDefault("0.0")
     private double rating;
 
-    @Column(nullable = false)
+    @Column(name = "dib_count")
     @ColumnDefault("0")
     private int dibCount;
 
-    @Column(nullable = false)
+    @Column(name = "review_count")
     @ColumnDefault("0")
     private int reviewCount;
-
-    private String operatingHours;
-
-    private String closedDays;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -61,9 +53,17 @@ public class TravelSite {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column
     private double latitude;
 
+    @Column
     private double longitude;
+
+    @Column
+    private String address;
+
+    @Column
+    private int areaCode;
 
 }
 

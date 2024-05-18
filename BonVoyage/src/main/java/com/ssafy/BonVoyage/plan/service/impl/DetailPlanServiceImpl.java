@@ -7,32 +7,37 @@ import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.plan.service.DetailPlanService;
 import com.ssafy.BonVoyage.site.domain.TravelSite;
 import com.ssafy.BonVoyage.site.repository.TravelSiteRepository;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class DetailPlanServiceImpl implements DetailPlanService {
 
-    private DetailPlanRepository detailPlanRepository;
-    private TravelPlanRepository travelPlanRepository;
-    private TravelSiteRepository siteRepository;
+    private final DetailPlanRepository detailPlanRepository;
+    private final TravelPlanRepository travelPlanRepository;
+    private final TravelSiteRepository siteRepository;
 
     @Override
     @Transactional
-    public Long create(DetailPlanDto dto) {
-        TravelPlan plan = travelPlanRepository.findById(dto.getPlanId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다. id=" + dto.getPlanId()));
-        // TODO: travel site
-        TravelSite site = siteRepository.findById(dto.getSiteId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 여행지가 존재하지 않습니다. id=" + dto.getSiteId()));
-        return detailPlanRepository.save(dto.toEntity(plan, site)).getId();
+    public int create(List<DetailPlanDto> dtos) {
+        int count = 0;
+        for (DetailPlanDto dto : dtos) {
+            log.info("detail plan: {}", dto.toString());
+            TravelPlan plan = travelPlanRepository.findById(dto.getPlanId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다. id=" + dto.getPlanId()));
+            TravelSite site = siteRepository.findById(dto.getSiteId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 여행지가 존재하지 않습니다. id=" + dto.getSiteId()));
+            detailPlanRepository.save(dto.toEntity(plan, site));
+
+            count++;
+        }
+        return count;
     }
 
     @Override
