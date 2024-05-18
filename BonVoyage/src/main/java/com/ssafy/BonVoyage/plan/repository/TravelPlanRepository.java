@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TravelPlanRepository extends JpaRepository<TravelPlan, Long> {
     List<TravelPlan> findByTravelGroupIn(List<TravelGroup> groups);
+    List<TravelPlan> findByTravelGroup(TravelGroup travelGroup);
 }

@@ -6,12 +6,14 @@ import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
 import com.ssafy.BonVoyage.plan.domain.TravelPlan;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
+import com.ssafy.BonVoyage.plan.dto.response.TravelPlanListResponse;
 import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,18 +58,20 @@ public class TravelPlanServiceImpl implements TravelPlanService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TravelPlanDto> list(String userEmail) {
-        // 1. user group 조회
+    public List<TravelPlanListResponse> list(String userEmail) {
         Member member = memberRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다. id=" + userEmail));
-        List<TravelGroup> userGroup = groupRepository.findAllByMemberId(member.getId());
-        List<Long> groupIds = userGroup.stream().map(TravelGroup::getId).collect(Collectors.toList());
+        List<TravelGroup> userGroups = groupRepository.findAllByMemberId(member.getId());
 
-        // 2. group별 여행 조회
-        List<TravelPlan> travelPlans = planRepository.findByTravelGroupIn(userGroup);
+        List<TravelPlanListResponse> result = new ArrayList<>();
 
-        return travelPlans.stream()
-                .map(travelPlan -> TravelPlanDto.toDto(travelPlan))
-                .collect(Collectors.toList());
+        for (TravelGroup group : userGroups) {
+            List<TravelPlan> plans = planRepository.findByTravelGroup(group);
+            for (TravelPlan plan : plans) {
+                result.add(TravelPlanListResponse.toDto(group, plan));
+            }
+        }
+
+        return result;
     }
 }
