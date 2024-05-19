@@ -1,5 +1,7 @@
 package com.ssafy.BonVoyage.group.controller;
 
+import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
+import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
 import com.ssafy.BonVoyage.group.dto.request.GroupInviteRequest;
 import com.ssafy.BonVoyage.group.dto.response.GroupInviteResponse;
@@ -8,6 +10,7 @@ import com.ssafy.BonVoyage.group.exception.GroupException;
 import com.ssafy.BonVoyage.group.service.GroupService;
 import com.ssafy.BonVoyage.group.service.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,14 +38,16 @@ public class GroupController {
 
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "그룹 생성", description = "생성자가 그룹장인 그룹 생성")
+    @Operation(summary = "그룹 생성", description = "생성자가 그룹장인 그룹 생성/ 멤버의 accessToken 필요")
     public ResponseEntity<Void> createTeam(
             @Valid @RequestPart final GroupCreateRequest request,
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestPart(value="file",required = false)  MultipartFile file
     ) throws IOException {
+        log.info("owner id = ", userPrincipal.getId());
         log.info("request = {}", request);
         log.info("file = {}", file);
-        groupService.createGroup(request, file);
+        groupService.createGroup(request, file, userPrincipal);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

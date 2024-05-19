@@ -1,6 +1,9 @@
 package com.ssafy.BonVoyage.group.service;
 
+import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
+import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.auth.domain.Member;
+import com.ssafy.BonVoyage.auth.repository.MemberRepository;
 import com.ssafy.BonVoyage.file.service.S3Service;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
@@ -27,17 +30,20 @@ import static com.ssafy.BonVoyage.group.exception.GroupExceptionType.*;
 public class GroupService {
 
     private final TravelGroupRepository travelGroupRepository;
+    private final MemberRepository memberRepository;
     private final S3Service s3Service;
     private RedisUtil redisUtil;
     private static final String INVITE_LINK_PREFIX = "groupdId=%d";
 
-    public void createGroup(final GroupCreateRequest request, final MultipartFile file) throws IOException {
+    public void createGroup(final GroupCreateRequest request, final MultipartFile file, @CurrentUser UserPrincipal userPrincipal) throws IOException {
+        Long ownerId = userPrincipal.getId();
         final String imageUrl = s3Service.upload(file);
         try {
             final TravelGroup team = TravelGroup.builder()
                     .groupName(request.name())
                     .description(request.description())
                     .groupProfileImage(imageUrl)
+                    .owner(ownerId)
                     .build();
             travelGroupRepository.save(team);
         } catch (Exception e) {

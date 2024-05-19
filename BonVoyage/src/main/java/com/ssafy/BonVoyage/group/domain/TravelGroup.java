@@ -34,8 +34,6 @@ public class TravelGroup {
     @Column
     private String description;
 
-    @Column
-    private Integer groupNum;
 
     @Enumerated(EnumType.STRING)
     private Preference preference;
@@ -44,10 +42,12 @@ public class TravelGroup {
     private String groupProfileImage;
 
 
+    @Column
+    private Long owner;
+
     public static TravelGroup toEntity(TravelGroupDto dto) {
         return TravelGroup.builder()
                 .groupName(dto.getGroupName())
-                .groupNum(dto.getGroupNum())
                 .preference(dto.getPreference())
                 .groupProfileImage(dto.getGroupProfileImage())
                 .build();
