@@ -44,9 +44,7 @@ public class GroupController {
             @CurrentUser UserPrincipal userPrincipal,
             @RequestPart(value="file",required = false)  MultipartFile file
     ) throws IOException {
-        log.info("owner id = ", userPrincipal.getId());
-        log.info("request = {}", request);
-        log.info("file = {}", file);
+
         groupService.createGroup(request, file, userPrincipal);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -97,9 +95,10 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/members/{memberId}")
+    @GetMapping("/members")
     @Operation(summary = "내가 속한 그룹 탐색", description = "내가 속한 그룹 모두 찾기")
-    public ResponseEntity<List<GroupReferenceResponse>> getMyTeams(@PathVariable final Long memberId) {
+    public ResponseEntity<List<GroupReferenceResponse>> getMyTeams( @CurrentUser UserPrincipal userPrincipal) {
+        Long memberId = userPrincipal.getId();
         return ResponseEntity.ok(teamQueryService.findMyTeams(memberId));
     }
 }

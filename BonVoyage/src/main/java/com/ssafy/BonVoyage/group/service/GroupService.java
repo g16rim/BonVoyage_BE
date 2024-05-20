@@ -17,6 +17,7 @@ import com.ssafy.BonVoyage.util.RandomUtil;
 import com.ssafy.BonVoyage.util.RedisUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,17 +37,20 @@ public class GroupService {
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
     private RedisUtil redisUtil;
+    @Value("${cloud.address}")
+    private String CLOUD_FRONT_DOMAIN_NAME;
     private static final String INVITE_LINK_PREFIX = "groupdId=%d";
 
     public void createGroup(final GroupCreateRequest request, final MultipartFile file, @CurrentUser UserPrincipal userPrincipal) throws IOException {
         Long ownerId = userPrincipal.getId();
         Optional<Member> member = memberRepository.findById(ownerId);
         final String imageUrl = s3Service.upload(file);
+
         try {
             final TravelGroup team = TravelGroup.builder()
                     .groupName(request.name())
                     .description(request.description())
-                    .groupProfileImage(imageUrl)
+                    .groupProfileImage(CLOUD_FRONT_DOMAIN_NAME+ imageUrl)
                     .owner(ownerId)
                     .build();
 //            groupWithMemberRepository.save(new GroupWithMember(현재 멤버(팀장), team));
