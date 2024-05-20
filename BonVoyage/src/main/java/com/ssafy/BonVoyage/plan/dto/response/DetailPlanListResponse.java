@@ -13,6 +13,7 @@ public class DetailPlanListResponse {
     int areaCode;
     double latitude;
     double longitude;
+    String address;
     int type;
     String image;
     // detail plan
@@ -25,6 +26,7 @@ public class DetailPlanListResponse {
                 .areaCode(site.getAreaCode())
                 .latitude(site.getLatitude())
                 .longitude(site.getLongitude())
+                .address(site.getAddress())
                 .type(site.getType())
                 .image(site.getImage())
                 .day(detailPlan.getDay())
