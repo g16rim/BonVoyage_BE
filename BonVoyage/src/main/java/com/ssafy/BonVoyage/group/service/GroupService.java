@@ -40,6 +40,7 @@ public class GroupService {
 
     public void createGroup(final GroupCreateRequest request, final MultipartFile file, @CurrentUser UserPrincipal userPrincipal) throws IOException {
         Long ownerId = userPrincipal.getId();
+        Optional<Member> member = memberRepository.findById(ownerId);
         final String imageUrl = s3Service.upload(file);
         try {
             final TravelGroup team = TravelGroup.builder()
@@ -49,7 +50,11 @@ public class GroupService {
                     .owner(ownerId)
                     .build();
 //            groupWithMemberRepository.save(new GroupWithMember(현재 멤버(팀장), team));
-            travelGroupRepository.save(team);
+            TravelGroup travelGroup = travelGroupRepository.save(team);
+            if(member.isPresent()) {
+                groupWithMemberRepository.save(new GroupWithMember(member.get(), travelGroup.getId()));
+            }
+
 
         } catch (Exception e) {
             s3Service.delete(imageUrl);
@@ -99,12 +104,12 @@ public class GroupService {
 
     public void joinTeam(final Long teamId, final GroupInviteRequest request) throws GroupException {
         validateExistTeam(teamId);
-
-        Optional<String> link = redisUtil.getData(INVITE_LINK_PREFIX.formatted(teamId), String.class);
-        if (link.isPresent()) {
-            validateMatchLink(link.get(), request.code());
+        Optional<Member> member = memberRepository.findByEmail(request.email());
+        if(member.isPresent()) {
+            groupWithMemberRepository.save(new GroupWithMember(member.get(), teamId));
+        }else {
+            throw new GroupException(EXPIRED_LINK);
         }
-        throw new GroupException(EXPIRED_LINK);
     }
 
     private void validateMatchLink(final String link, final String userLink) throws GroupException {
