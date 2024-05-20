@@ -24,5 +24,5 @@ public class TravelGroupDto {
 
     private String groupProfileImage;
 
-    private List<GroupWithMember> groupWithMembers = new ArrayList<>();
+//    private List<GroupWithMember> groupWithMembers = new ArrayList<>();
 }

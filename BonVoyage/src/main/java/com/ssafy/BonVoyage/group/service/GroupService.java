@@ -5,11 +5,13 @@ import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.auth.domain.Member;
 import com.ssafy.BonVoyage.auth.repository.MemberRepository;
 import com.ssafy.BonVoyage.file.service.S3Service;
+import com.ssafy.BonVoyage.group.domain.GroupWithMember;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
 import com.ssafy.BonVoyage.group.dto.request.GroupInviteRequest;
 import com.ssafy.BonVoyage.group.dto.response.GroupInviteResponse;
 import com.ssafy.BonVoyage.group.exception.GroupException;
+import com.ssafy.BonVoyage.group.repository.GroupWithMemberRepository;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
 import com.ssafy.BonVoyage.util.RandomUtil;
 import com.ssafy.BonVoyage.util.RedisUtil;
@@ -30,6 +32,7 @@ import static com.ssafy.BonVoyage.group.exception.GroupExceptionType.*;
 public class GroupService {
 
     private final TravelGroupRepository travelGroupRepository;
+    private final GroupWithMemberRepository groupWithMemberRepository;
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
     private RedisUtil redisUtil;
@@ -45,7 +48,9 @@ public class GroupService {
                     .groupProfileImage(imageUrl)
                     .owner(ownerId)
                     .build();
+//            groupWithMemberRepository.save(new GroupWithMember(현재 멤버(팀장), team));
             travelGroupRepository.save(team);
+
         } catch (Exception e) {
             s3Service.delete(imageUrl);
         }
