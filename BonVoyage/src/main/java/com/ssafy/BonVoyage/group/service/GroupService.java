@@ -9,11 +9,14 @@ import com.ssafy.BonVoyage.group.domain.GroupWithMember;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
 import com.ssafy.BonVoyage.group.dto.request.GroupInviteRequest;
+import com.ssafy.BonVoyage.group.dto.response.GroupInfoResponse;
 import com.ssafy.BonVoyage.group.dto.response.GroupInviteResponse;
 import com.ssafy.BonVoyage.group.dto.response.GroupMemberResponse;
 import com.ssafy.BonVoyage.group.exception.GroupException;
 import com.ssafy.BonVoyage.group.repository.GroupWithMemberRepository;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
+import com.ssafy.BonVoyage.plan.domain.TravelPlan;
+import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.util.RandomUtil;
 import com.ssafy.BonVoyage.util.RedisUtil;
 import jakarta.transaction.Transactional;
@@ -41,6 +44,7 @@ public class GroupService {
     private final GroupWithMemberRepository groupWithMemberRepository;
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
+    private final TravelPlanRepository travelPlanRepository;
     private RedisUtil redisUtil;
     @Value("${cloud.address}")
     private String CLOUD_FRONT_DOMAIN_NAME;
@@ -126,6 +130,7 @@ public class GroupService {
         }
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<GroupMemberResponse> findGroupMembers(Long groupId) {
         List<Member> members = groupWithMemberRepository.findMemberByGroupId(groupId);
         log.info(String.valueOf(members.size()));
@@ -134,4 +139,15 @@ public class GroupService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public GroupInfoResponse findTeamInfo(Long planId) {
+        TravelPlan plan = travelPlanRepository.findById(planId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다. id=" + planId));
+        TravelGroup group = travelGroupRepository.findById(plan.getTravelGroup().getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 그룹이 존재하지 않습니다. id=" + plan.getTravelGroup().getId()));
+        Member leader = memberRepository.findById(group.getOwner())
+                .orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다. id=" + group.getOwner()));
+        int count = groupWithMemberRepository.countDistinctByGroupId(group.getId());
+        return GroupInfoResponse.toDto(group, leader, count);
+    }
 }

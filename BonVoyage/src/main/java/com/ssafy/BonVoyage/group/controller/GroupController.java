@@ -107,4 +107,10 @@ public class GroupController {
     public ResponseEntity<List<GroupMemberResponse>> getTeamMembers(@PathVariable final Long teamId) {
         return ResponseEntity.ok(groupService.findGroupMembers(teamId));
     }
+
+    @GetMapping("/info/{planId}")
+    @Operation(summary = "그룹 정보 조회", description = "계획 주인의 그룹 정보 조회")
+    public ResponseEntity<?> getTeamInfo(@PathVariable final Long planId) {
+        return ResponseEntity.ok(groupService.findTeamInfo(planId));
+    }
 }
