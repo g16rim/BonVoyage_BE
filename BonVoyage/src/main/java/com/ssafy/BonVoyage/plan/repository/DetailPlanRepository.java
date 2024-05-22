@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DetailPlanRepository extends JpaRepository<DetailPlan, Long> {
     List<DetailPlan> findAllByTravelPlan(TravelPlan travelPlan);
+    void deleteAllByTravelPlan(TravelPlan travelPlan);
 }

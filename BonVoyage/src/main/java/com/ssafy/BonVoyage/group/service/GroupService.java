@@ -10,6 +10,7 @@ import com.ssafy.BonVoyage.group.domain.TravelGroup;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
 import com.ssafy.BonVoyage.group.dto.request.GroupInviteRequest;
 import com.ssafy.BonVoyage.group.dto.response.GroupInviteResponse;
+import com.ssafy.BonVoyage.group.dto.response.GroupMemberResponse;
 import com.ssafy.BonVoyage.group.exception.GroupException;
 import com.ssafy.BonVoyage.group.repository.GroupWithMemberRepository;
 import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
@@ -17,12 +18,15 @@ import com.ssafy.BonVoyage.util.RandomUtil;
 import com.ssafy.BonVoyage.util.RedisUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.ssafy.BonVoyage.group.exception.GroupExceptionType.*;
 
@@ -30,6 +34,7 @@ import static com.ssafy.BonVoyage.group.exception.GroupExceptionType.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class GroupService {
 
     private final TravelGroupRepository travelGroupRepository;
@@ -53,7 +58,6 @@ public class GroupService {
                     .groupProfileImage(CLOUD_FRONT_DOMAIN_NAME+ imageUrl)
                     .owner(ownerId)
                     .build();
-//            groupWithMemberRepository.save(new GroupWithMember(현재 멤버(팀장), team));
             TravelGroup travelGroup = travelGroupRepository.save(team);
             if(member.isPresent()) {
                 groupWithMemberRepository.save(new GroupWithMember(member.get(), travelGroup.getId()));
@@ -120,6 +124,14 @@ public class GroupService {
         if (!link.equals(userLink)) {
             throw new GroupException(NOT_MATCH_LINK);
         }
+    }
+
+    public List<GroupMemberResponse> findGroupMembers(Long groupId) {
+        List<Member> members = groupWithMemberRepository.findMemberByGroupId(groupId);
+        log.info(String.valueOf(members.size()));
+        return members.stream()
+                .map(member -> GroupMemberResponse.toDto(member))
+                .collect(Collectors.toUnmodifiableList());
     }
 
 }

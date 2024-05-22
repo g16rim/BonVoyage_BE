@@ -3,6 +3,7 @@ package com.ssafy.BonVoyage.plan.controller;
 import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
 import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
+import com.ssafy.BonVoyage.plan.service.DetailPlanService;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
+    private final DetailPlanService detailPlanService;
 
     @Operation(summary = "여행 계획 생성", description = "여행 그룹이 계획을 시작합니다.")
     @ApiResponses(value = {

@@ -9,6 +9,7 @@ import com.ssafy.BonVoyage.group.repository.TravelGroupRepository;
 import com.ssafy.BonVoyage.plan.domain.TravelPlan;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
 import com.ssafy.BonVoyage.plan.dto.response.TravelPlanListResponse;
+import com.ssafy.BonVoyage.plan.repository.DetailPlanRepository;
 import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.plan.service.TravelPlanService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class TravelPlanServiceImpl implements TravelPlanService {
     private final TravelPlanRepository planRepository;
     private final TravelGroupRepository groupRepository;
     private final MemberRepository memberRepository;
-    private final GroupWithMemberRepository groupWithMemberRepository;
+    private final DetailPlanRepository detailPlanRepository;
 
     @Override
     @Transactional
@@ -58,6 +59,8 @@ public class TravelPlanServiceImpl implements TravelPlanService {
     @Override
     @Transactional
     public void delete(Long id) {
+        TravelPlan plan = planRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다. id=" + id));
+        detailPlanRepository.deleteAllByTravelPlan(plan); // 관련된 detail plan 지우기
         planRepository.deleteById(id);
     }
 

@@ -5,12 +5,12 @@ import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.group.dto.request.GroupCreateRequest;
 import com.ssafy.BonVoyage.group.dto.request.GroupInviteRequest;
 import com.ssafy.BonVoyage.group.dto.response.GroupInviteResponse;
+import com.ssafy.BonVoyage.group.dto.response.GroupMemberResponse;
 import com.ssafy.BonVoyage.group.dto.response.GroupReferenceResponse;
 import com.ssafy.BonVoyage.group.exception.GroupException;
 import com.ssafy.BonVoyage.group.service.GroupService;
 import com.ssafy.BonVoyage.group.service.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -97,8 +97,14 @@ public class GroupController {
 
     @GetMapping("/members")
     @Operation(summary = "내가 속한 그룹 탐색", description = "내가 속한 그룹 모두 찾기")
-    public ResponseEntity<List<GroupReferenceResponse>> getMyTeams( @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<List<GroupReferenceResponse>> getMyTeams(@CurrentUser UserPrincipal userPrincipal) {
         Long memberId = userPrincipal.getId();
         return ResponseEntity.ok(teamQueryService.findMyTeams(memberId));
+    }
+
+    @GetMapping("/{teamId}")
+    @Operation(summary = "그룹 멤버 조회", description = "그룹에 속한 모든 멤버 찾기")
+    public ResponseEntity<List<GroupMemberResponse>> getTeamMembers(@PathVariable final Long teamId) {
+        return ResponseEntity.ok(groupService.findGroupMembers(teamId));
     }
 }
