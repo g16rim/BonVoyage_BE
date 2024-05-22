@@ -59,6 +59,7 @@ public class GroupService {
             final TravelGroup team = TravelGroup.builder()
                     .groupName(request.name())
                     .description(request.description())
+                    .preference(request.preference())
                     .groupProfileImage(CLOUD_FRONT_DOMAIN_NAME+ imageUrl)
                     .owner(ownerId)
                     .build();
