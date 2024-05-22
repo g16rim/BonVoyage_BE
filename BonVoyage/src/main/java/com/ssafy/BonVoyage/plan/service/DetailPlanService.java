@@ -14,4 +14,6 @@ public interface DetailPlanService {
     List<DetailPlanDto> listDetailPlan(Long planId);
 
     List<DetailPlanListResponse> listDetailPlanSites(int planId);
+
+    void modifyOrder(List<DetailPlanDto> plans);
 }

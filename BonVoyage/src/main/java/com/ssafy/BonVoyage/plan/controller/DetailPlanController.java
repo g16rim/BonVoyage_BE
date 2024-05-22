@@ -40,6 +40,17 @@ public class DetailPlanController {
         return ResponseEntity.ok(true);
     }
 
+    @Operation(summary = "상세 계획 수정", description = "plan_order 수정")
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody List<DetailPlanDto> plans) {
+        log.info("update controller");
+        for (DetailPlanDto detailPlan : plans) {
+            log.info("detailPlan = {}", detailPlan.toString());
+        }
+        detailPlanService.modifyOrder(plans);
+        return ResponseEntity.ok(true);
+    }
+
     @Operation(summary = "상세 계획 목록", description = "site - mapy, mapx, title, type이 필요")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "목록 조회 성공", content = { @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DetailPlanListResponse.class))) } ),

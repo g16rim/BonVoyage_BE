@@ -10,7 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "detail_plan")
+@Table(name = "detail_plan", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"site_id", "plan_id"})
+})
 public class DetailPlan {
 
     @Id

@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class DetailPlanListResponse {
     // travel site
+    Long siteId;
     String title;
     int areaCode;
     double latitude;
@@ -17,11 +18,13 @@ public class DetailPlanListResponse {
     int type;
     String image;
     // detail plan
+    Long id;
     int day;
     int planOrder;
 
     public static DetailPlanListResponse toResponse(TravelSite site, DetailPlan detailPlan) {
         return DetailPlanListResponse.builder()
+                .siteId(site.getId())
                 .title(site.getTitle())
                 .areaCode(site.getAreaCode())
                 .latitude(site.getLatitude())
@@ -29,6 +32,7 @@ public class DetailPlanListResponse {
                 .address(site.getAddress())
                 .type(site.getType())
                 .image(site.getImage())
+                .id(detailPlan.getId())
                 .day(detailPlan.getDay())
                 .planOrder(detailPlan.getPlanOrder())
                 .build();

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,6 @@ public class DetailPlanServiceImpl implements DetailPlanService {
     public DetailPlanDto update(DetailPlanDto dto) {
         TravelPlan plan = travelPlanRepository.findById(dto.getPlanId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다. id=" + dto.getPlanId()));
-        // TODO: travel site
         TravelSite site = siteRepository.findById(dto.getSiteId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 여행지가 존재하지 않습니다. id=" + dto.getSiteId()));
         return DetailPlanDto.toDto(detailPlanRepository.save(dto.toEntity(plan, site)));
@@ -86,6 +86,18 @@ public class DetailPlanServiceImpl implements DetailPlanService {
                     .orElseThrow(() -> new IllegalArgumentException("잘못된 site id=" + detailPlan.getTravelPlan().getId()));
             result.add(DetailPlanListResponse.toResponse(site, detailPlan));
         }
+        result.sort(Comparator.comparingInt(DetailPlanListResponse::getPlanOrder));
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void modifyOrder(List<DetailPlanDto> plans) {
+        int cnt = 0;
+        for (DetailPlanDto plan : plans) {
+            log.info("modify order: {}", plan.getPlanOrder());
+            cnt += detailPlanRepository.updatePlanOrderByPlanIdAndSiteId(plan.getPlanOrder(), plan.getSiteId(), plan.getPlanId());
+        }
+        log.info("modify row: {}", cnt);
     }
 }
