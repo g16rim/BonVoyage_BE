@@ -10,6 +10,7 @@ import lombok.Data;
 public class TravelRecordDto {
     private String comment;
     private Long travelGroupId;
+    private Long travelPlanId;
 
     public TravelRecord toEntity(TravelGroup travelGroup) {
         return TravelRecord.builder()
