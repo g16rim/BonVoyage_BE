@@ -38,10 +38,14 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    @Column
+    private String birth;
 
+    @Column
+    private String phone;
 
     public void updateName(String name){
-        this.username = username;
+        this.username = name;
     }
     public void updateImageUrl(String imageUrl){
         this.imageUrl = imageUrl;

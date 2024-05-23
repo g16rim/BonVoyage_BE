@@ -126,6 +126,8 @@ public class AuthService {
                 .authority(Authority.USER)
                 .imageUrl(imageAddress)
                 .grade(Grade.Beginner)
+                .birth(signUpRequest.getBirth())
+                .phone(signUpRequest.getPhone())
                 .build();
 
 

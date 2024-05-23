@@ -1,11 +1,9 @@
 package com.ssafy.BonVoyage.auth.payload.request.auth;
 
-import com.ssafy.BonVoyage.auth.domain.Grade;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SignUpRequest {
@@ -23,6 +21,9 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
+    @NotBlank
+    private String birth;
 
-
+    @NotBlank
+    private String phone;
 }
