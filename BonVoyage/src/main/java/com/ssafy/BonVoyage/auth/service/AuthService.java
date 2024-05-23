@@ -13,8 +13,12 @@ import com.ssafy.BonVoyage.auth.payload.response.AuthResponse;
 import com.ssafy.BonVoyage.auth.payload.response.Message;
 import com.ssafy.BonVoyage.auth.repository.MemberRepository;
 import com.ssafy.BonVoyage.auth.repository.TokenRepository;
+import com.ssafy.BonVoyage.file.dto.ProfileImageDto;
+import com.ssafy.BonVoyage.file.service.ImageService;
+import com.ssafy.BonVoyage.file.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,8 +26,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
@@ -36,10 +43,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final CustomTokenProviderService customTokenProviderService;
-
+    private final ImageService imageService;
     private final MemberRepository memberRepository;
     private final TokenRepository tokenRepository;
-
+    private final S3Service s3Service;
+    @Value("${cloud.address}")
+    private String CLOUD_FRONT_DOMAIN_NAME;
 
     public ResponseEntity<?> whoAmI(UserPrincipal userPrincipal){
         Optional<Member> member = memberRepository.findById(userPrincipal.getId());
@@ -102,16 +111,20 @@ public class AuthService {
         return ResponseEntity.ok(authResponse);
     }
 
-    public ResponseEntity<?> signup(SignUpRequest signUpRequest){
+    public ResponseEntity<?> signup(SignUpRequest signUpRequest, @RequestPart(value="file",required = false) MultipartFile file) throws IOException {
         DefaultAssert.isTrue(!memberRepository.existsByEmail(signUpRequest.getEmail()), "해당 이메일이 이미 존재합니다.");
+        ProfileImageDto profileImageDto = new ProfileImageDto();
+        String imgPath = s3Service.upload(file);
 
+        profileImageDto.setImgFullPath(CLOUD_FRONT_DOMAIN_NAME+"/"+imgPath);
+        String imageAddress = imageService.saveMember(profileImageDto);
         Member member = Member.builder()
                 .username(signUpRequest.getName())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .provider(Provider.local)
                 .authority(Authority.USER)
-                .imageUrl(signUpRequest.getImageUrl())
+                .imageUrl(imageAddress)
                 .grade(Grade.Beginner)
                 .build();
 
