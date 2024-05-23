@@ -4,6 +4,8 @@ import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
 import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
 import com.ssafy.BonVoyage.auth.domain.Member;
 import com.ssafy.BonVoyage.auth.repository.MemberRepository;
+import com.ssafy.BonVoyage.file.dto.ProfileImageDto;
+import com.ssafy.BonVoyage.file.service.ImageService;
 import com.ssafy.BonVoyage.file.service.S3Service;
 import com.ssafy.BonVoyage.group.domain.GroupWithMember;
 import com.ssafy.BonVoyage.group.domain.TravelGroup;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,23 +47,29 @@ public class GroupService {
     private final GroupWithMemberRepository groupWithMemberRepository;
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
+    private final ImageService imageService;
     private final TravelPlanRepository travelPlanRepository;
     private RedisUtil redisUtil;
     @Value("${cloud.address}")
     private String CLOUD_FRONT_DOMAIN_NAME;
     private static final String INVITE_LINK_PREFIX = "groupdId=%d";
 
-    public void createGroup(final GroupCreateRequest request, final MultipartFile file, @CurrentUser UserPrincipal userPrincipal) throws IOException {
+    public void createGroup(final GroupCreateRequest request, @RequestPart(value="file",required = false)  MultipartFile file, @CurrentUser UserPrincipal userPrincipal) throws IOException {
         Long ownerId = userPrincipal.getId();
         Optional<Member> member = memberRepository.findById(ownerId);
-        final String imageUrl = s3Service.upload(file);
 
+        ProfileImageDto profileImageDto = new ProfileImageDto();
+        String imgPath = s3Service.upload(file);
+
+        profileImageDto.setImgFullPath(CLOUD_FRONT_DOMAIN_NAME+"/"+imgPath);
+        String imageAddress = imageService.saveMember(profileImageDto);
+    
         try {
             final TravelGroup team = TravelGroup.builder()
                     .groupName(request.name())
                     .description(request.description())
                     .preference(request.preference())
-                    .groupProfileImage(CLOUD_FRONT_DOMAIN_NAME+ imageUrl)
+                    .groupProfileImage(imageAddress)
                     .owner(ownerId)
                     .build();
             TravelGroup travelGroup = travelGroupRepository.save(team);
@@ -70,7 +79,7 @@ public class GroupService {
 
 
         } catch (Exception e) {
-            s3Service.delete(imageUrl);
+            s3Service.delete(imageAddress);
         }
     }
     public void updateGroup(final Long groupId, final GroupCreateRequest request) throws GroupException {
