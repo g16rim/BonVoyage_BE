@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/record")
@@ -41,6 +40,16 @@ public class TravelRecordController {
         Member member = memberRepository.findById(currentUser.getId())
                 .orElseThrow(() -> new IllegalStateException("해당 멤버는 존재하지 않습니다."));
         return new ResponseEntity<>(travelRecordService.create(dto, member), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "여행 기록 리스트", description = "자신의 여행 기록 리스트를 보여줍니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "기록 리스트 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class) ) } ),
+            @ApiResponse(responseCode = "400", description = "유저 확인 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
+    })
+    @GetMapping("/list")
+    public ResponseEntity<?> list(@CurrentUser UserPrincipal currentUser) {
+        return new ResponseEntity<>(travelRecordService.read(currentUser.getId()), HttpStatus.CREATED);
     }
 
 }

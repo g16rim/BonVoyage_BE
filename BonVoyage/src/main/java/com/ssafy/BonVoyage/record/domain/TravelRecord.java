@@ -16,7 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "travel_record")
+@Table(name = "travel_record", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"group_id", "plan_id", "member_id"})
+})
 public class TravelRecord {
 
     @Id
