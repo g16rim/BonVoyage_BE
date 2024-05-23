@@ -1,5 +1,9 @@
 package com.ssafy.BonVoyage.record;
 
+import com.ssafy.BonVoyage.auth.config.security.token.CurrentUser;
+import com.ssafy.BonVoyage.auth.config.security.token.UserPrincipal;
+import com.ssafy.BonVoyage.auth.domain.Member;
+import com.ssafy.BonVoyage.auth.repository.MemberRepository;
 import com.ssafy.BonVoyage.plan.dto.TravelPlanDto;
 import com.ssafy.BonVoyage.plan.repository.TravelPlanRepository;
 import com.ssafy.BonVoyage.record.dto.TravelRecordDto;
@@ -16,24 +20,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/record")
 @RequiredArgsConstructor
 @Tag(name="Travel Record", description = "여행 기록 API")
 public class TravelRecordController {
 
-    private final TravelPlanRepository travelPlanRepository;
     private final TravelRecordServiceImpl travelRecordService;
+    private final MemberRepository memberRepository;
 
     @Operation(summary = "여행 기록 생성", description = "여행 그룹이 기록을 시작합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "기록 생성 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class) ) } ),
             @ApiResponse(responseCode = "400", description = "유저 확인 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
     })
-    @PostMapping("/{groupId}")
-    public ResponseEntity<?> create(@PathVariable(name = "groupId") Long groupId, @RequestBody TravelRecordDto dto) {
-        dto.setTravelGroupId(groupId);
-        return new ResponseEntity<>(travelRecordService.create(dto), HttpStatus.CREATED);
+    @PostMapping()
+    public ResponseEntity<?> create(@RequestBody TravelRecordDto dto, @CurrentUser UserPrincipal currentUser) {
+        Member member = memberRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new IllegalStateException("해당 멤버는 존재하지 않습니다."));
+        return new ResponseEntity<>(travelRecordService.create(dto, member), HttpStatus.CREATED);
     }
 
 }
